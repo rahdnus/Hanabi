@@ -7,10 +7,11 @@ namespace Hanabi{
 
 public class Spawner : MonoBehaviour
 {
+
     [SerializeField]MovementTranslator translator;
     void Start()
     {
-        translator.InitOperation();
+        translator.Init();
     }
     void Update()
     {        
