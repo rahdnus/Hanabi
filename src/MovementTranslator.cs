@@ -6,14 +6,15 @@ namespace Hanabi{
     [System.Serializable]
     public class MovementTranslator
     {
-        [SerializeField]MovementQuery query;
         [SerializeField] Transform transform;
         [SerializeField] float moveSpeed=1;
+        [Space(20)]
+        [SerializeField]MovementQuery query;
 
-        Vector3 destination;
-        float T=0f,scaler=0.00001f,step=1;
+        Vector3 start,destination;
+        float T=0,scaler=0.01f,step=1;
         public System.Action operation;
-
+        public System.Action Arrived;
 
         public void Init()
         {
@@ -31,19 +32,28 @@ namespace Hanabi{
                 case MovementType.Static:break;
             }
         }
-        
+        public void Clear()
+        {
+            operation=null;
+        }
         private void CalculateLinear()
         {
-            destination=new Vector3(0,Mathf.Sin(Mathf.Deg2Rad* query.angle)*query.distance,Mathf.Cos(Mathf.Deg2Rad*query.angle)*query.distance)+transform.position;
+            start=transform.position;
+            destination=new Vector3(0,Mathf.Sin(Mathf.Deg2Rad*query.angle)*query.distance,Mathf.Cos(Mathf.Deg2Rad*query.angle)*query.distance)+start;
         }
         public void Linear()
         {
-            transform.position=Vector3.Lerp(transform.position,destination,T);
+            if(Vector3.Distance(transform.position,destination)<=float.Epsilon)
+            {
+                Arrived();
+                Clear();
+            }
+            transform.position=Vector3.Lerp(start,destination,T);
             T+=step;
         }
         public void Radial()
         {
-
+            
         }
 
     }
