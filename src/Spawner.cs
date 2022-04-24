@@ -16,7 +16,7 @@ public class Spawner : MonoBehaviour
     {        
         if(destinationreached)
             return;
-        translator.operation();
+        translator.Operation();
     }
     /*TEMP*/void OnReach()
     {
