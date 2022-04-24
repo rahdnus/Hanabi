@@ -4,26 +4,17 @@ using UnityEngine;
 
 namespace Hanabi{
 
-public enum MoveType
-{
-    Static,Linear,Radial
-}
+
 public class Spawner : MonoBehaviour
 {
-    [SerializeField]MoveType moveType;
-    private System.Action<Transform> move;
+    [SerializeField]MovementTranslator translator;
     void Start()
     {
-
-        move=Utils.getMove(moveType);
+        translator.InitOperation();
     }
     void Update()
-    {
-
-        if(moveType==MoveType.Static)
-            return;
-        
-        move(this.transform);
+    {        
+        translator.operation();
     }
 }
 }
