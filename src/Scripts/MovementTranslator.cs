@@ -31,7 +31,7 @@ namespace Hanabi{
                 InitRadial();
                 Operation+=Radial;
                 break;
-            case MovementType.Static:break;
+          
         }
     }
     public void Clear()
@@ -45,9 +45,9 @@ namespace Hanabi{
         start=transform.position;
 
         float y=Mathf.Sin(Mathf.Deg2Rad*query.angle)*query.distance;
-        float z=Mathf.Cos(Mathf.Deg2Rad*query.angle)*query.distance;
+        float x=Mathf.Cos(Mathf.Deg2Rad*query.angle)*query.distance;
 
-        destination=new Vector3(0,y,z)+start;
+        destination=new Vector3(x,y,0)+start;
     }
     public void Linear()
     {  
@@ -79,10 +79,11 @@ namespace Hanabi{
         operationCount=0;
 
         float y=Mathf.Sin(Mathf.Deg2Rad*T)*query.distance;
-        float z=Mathf.Cos(Mathf.Deg2Rad*T)*query.distance;
+        float x=Mathf.Cos(Mathf.Deg2Rad*T)*query.distance;
         
-        destination=new Vector3(0,y,z)+start;
+        destination=new Vector3(x,y,0)+start;
         Debug.Log(destination);
+        Debug.Log(start);
 
         Debug.Log(step);
     }
@@ -91,9 +92,9 @@ namespace Hanabi{
         T=(T+step*query.anticlockwise)%360;
 
         float y=Mathf.Sin(Mathf.Deg2Rad*T)*query.distance;
-        float z=Mathf.Cos(Mathf.Deg2Rad*T)*query.distance;
+        float x=Mathf.Cos(Mathf.Deg2Rad*T)*query.distance;
         
-        transform.position=new Vector3(0,y,z)+start;
+        transform.position=new Vector3(x,y,0)+start;
 
         CheckRadial();
     }
@@ -125,7 +126,7 @@ namespace Hanabi{
     }
     public enum MovementType
     {
-        Static, Linear, Radial
+        Linear, Radial
     }
 }
 
