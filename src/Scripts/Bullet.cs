@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+namespace Hanabi{
+
+
 public class Bullet : MonoBehaviour
 {
     Rigidbody rb;
@@ -29,4 +32,5 @@ public class Bullet : MonoBehaviour
     {
         rb.MovePosition((transform.position+transform.forward*bulletSpeed));   
     }
+}
 }

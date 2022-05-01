@@ -5,6 +5,7 @@ using UnityEngine;
 namespace Hanabi{
     [System.Serializable]public class MovementTranslator{
 
+        public AnimationCurve stepCurve;
         public System.Action Operation,Arrived;
         [SerializeField] Transform transform;
         [Space(20)]
@@ -43,17 +44,18 @@ namespace Hanabi{
     private void InitLinear()
     {
         start=transform.position;
-
+        T=0;
         float y=Mathf.Sin(Mathf.Deg2Rad*query.angle)*query.distance;
         float x=Mathf.Cos(Mathf.Deg2Rad*query.angle)*query.distance;
 
         destination=new Vector3(x,y,0)+start;
     }
+    float stepper=0f;
     public void Linear()
     {  
         transform.position=Vector3.Lerp(start,destination,T);
-        T+=step*direction;
-
+        T=stepCurve.Evaluate(stepper);
+        stepper+=step*direction;
         CheckLinear();
     }
       void CheckLinear()
@@ -63,7 +65,7 @@ namespace Hanabi{
             operationCount+=1;
             direction*=-1;
             
-            if(operationCount==query.times)
+            if(operationCount==query.times && query.times!=-1)
             {
                 Arrived();
                 Clear();
@@ -74,7 +76,8 @@ namespace Hanabi{
     {
         start=transform.position;
         T=query.angle;
-        direction=query.anticlockwise;
+        if(query.anticlockwise!=0)
+            direction=query.anticlockwise>0?1:-1;
 
         operationCount=0;
 
@@ -82,15 +85,12 @@ namespace Hanabi{
         float x=Mathf.Cos(Mathf.Deg2Rad*T)*query.distance;
         
         destination=new Vector3(x,y,0)+start;
-        Debug.Log(destination);
-        Debug.Log(start);
 
-        Debug.Log(step);
     }
     public void Radial()
     {
         T=(T+step*query.anticlockwise)%360;
-
+        Debug.Log(T);
         float y=Mathf.Sin(Mathf.Deg2Rad*T)*query.distance;
         float x=Mathf.Cos(Mathf.Deg2Rad*T)*query.distance;
         
@@ -108,7 +108,7 @@ namespace Hanabi{
             
             operationCount+=1;
 
-            if(operationCount==query.times)
+            if(operationCount==query.times && query.times!=-1)
             {
                 Arrived();
                 Clear();
@@ -122,7 +122,9 @@ namespace Hanabi{
     public class MovementQuery{
         public MovementType type;
         public float angle=-1,distance=-1,speed=1;
-        public int times=1,anticlockwise=1;
+        public int times=1;
+        [Range(-1,1)]
+        public float anticlockwise=1;
     }
     public enum MovementType
     {
