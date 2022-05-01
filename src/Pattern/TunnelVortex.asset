@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d774582986090d840907bfb30c181697, type: 3}
   m_Name: TunnelVortex
   m_EditorClassIdentifier: 
+  mode: 0
+  radius: 0.26
   spin: 1
   clockwise: 0
   rotationSpeed: 1
@@ -19,5 +21,7 @@ MonoBehaviour:
   noofSpawners: 10
   startAngle: 90
   spreadAngle: 324
-  bulletSpeed: 0.03
-  spawnRate: 30
+  bulletSpeed: 3
+  speedVariance: 0.2
+  spawnRate: 3
+  times: 3

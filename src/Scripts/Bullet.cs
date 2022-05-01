@@ -30,7 +30,7 @@ public class Bullet : MonoBehaviour
     }
     void FixedUpdate()
     {
-        rb.MovePosition((transform.position+transform.forward*bulletSpeed));   
+        rb.MovePosition((transform.position+transform.forward*bulletSpeed*Time.deltaTime));   
     }
 }
 }

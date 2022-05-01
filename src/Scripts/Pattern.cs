@@ -2,20 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Hanabi{
-    [CreateAssetMenu(fileName="Pattern",menuName="SO/Pattern")]
+namespace Hanabi{    
+[CreateAssetMenu(fileName="Pattern",menuName="SO/Pattern")]
+[System.Serializable]
 public class Pattern : ScriptableObject
 {
+    public SpawnMode mode;
+    public float radius=1.0f;
     public bool spin=false,clockwise=false;
     public float rotationSpeed=1.0f;
     public GameObject bulletPrefab=null;
     public int noofSpawners=1;
-    // Transform[] spawnPoints;
     public float startAngle=90,spreadAngle=180;
-    public float bulletSpeed=1.0f;
+    public float bulletSpeed=1.0f,speedVariance=0;
     public float spawnRate=1.0f;
-
-
+    public int times=1;
     public void InitialiseSpawnPoint(out Transform[] spawnPoints,Transform transform)
     {
         spawnPoints=new Transform[noofSpawners];
@@ -25,13 +26,16 @@ public class Pattern : ScriptableObject
 
             spawnPoints[i]=new GameObject("Spawn").transform;
             spawnPoints[i].SetParent(transform);
-            float y=Mathf.Sin(Mathf.Deg2Rad*currentAngle);
-            float x=Mathf.Cos(Mathf.Deg2Rad*currentAngle);
+            float y=radius*Mathf.Sin(Mathf.Deg2Rad*currentAngle);
+            float x=radius*Mathf.Cos(Mathf.Deg2Rad*currentAngle);
             spawnPoints[i].position+=new Vector3(x,y,0);
             spawnPoints[i].rotation=(Quaternion.LookRotation(spawnPoints[i].position-transform.position,-transform.forward));
             currentAngle+=spreadAngle/(noofSpawners-1);
         }
     }
   
+}
+public enum SpawnMode{
+    Sync,Async
 }
 }

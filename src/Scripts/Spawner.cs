@@ -12,6 +12,7 @@ public class Spawner : MonoBehaviour
     public bool destinationreached=false;
     public bool move;
     float timer;
+    int spawns=0;
     void Start()
     {
         pattern.InitialiseSpawnPoint(out spawnPoints,transform);
@@ -21,43 +22,73 @@ public class Spawner : MonoBehaviour
 
         translator.Init();
         translator.Arrived+=OnReach;
+
     }
     void Update()
     {        
         if(destinationreached)
             return;
+        
         if(move)
             translator.Operation();
 
-        Spin();
-        Spawn();
-
+        if(pattern.spin)
+            Spin();
+        
+        if(Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            spawns=0;
+            if(pattern.mode==SpawnMode.Async)
+                StartCoroutine(AsyncSpawn());
+            else if(pattern.mode==SpawnMode.Sync)
+                SyncSpawn();
+        }
     }
     void Spin()
     {
-    if(pattern.spin)
+        if(pattern.clockwise)
         {
-            if(pattern.clockwise)
-            {
-                transform.Rotate(new Vector3(0,0,pattern.rotationSpeed));
-            }
-            else
-            {
-                transform.Rotate(new Vector3(0,0,-pattern.rotationSpeed));
-            }
+            transform.Rotate(new Vector3(0,0,pattern.rotationSpeed));
+        }
+        else
+        {
+            transform.Rotate(new Vector3(0,0,-pattern.rotationSpeed));
         }
     }
-    void Spawn()
+    IEnumerator AsyncSpawn()
     {
-        timer+=Time.deltaTime;
-        if(timer>1.0f/pattern.spawnRate)
+        while(true)
         {
-            timer=0f;
+        yield return new WaitForSeconds(1.0f/pattern.spawnRate);
+            if(pattern.times!=-1)
+            {
+                if(spawns>=pattern.times)
+                {
+                    yield break;
+
+                }
+                spawns++;
+            }
             foreach(Transform point in spawnPoints)
             {
                 Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(pattern.bulletSpeed);
             }
         }
+    }
+    void SyncSpawn()
+    {
+            float speed=pattern.bulletSpeed;
+
+        while(spawns<pattern.times)
+        {
+            spawns++;
+            foreach(Transform point in spawnPoints)
+            {
+                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(speed);
+            }
+            speed-=pattern.speedVariance;
+        }
+           
     }
     /*TEMP*/void OnReach()
     {

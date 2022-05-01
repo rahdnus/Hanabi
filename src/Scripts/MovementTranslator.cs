@@ -90,7 +90,6 @@ namespace Hanabi{
     public void Radial()
     {
         T=(T+step*query.anticlockwise)%360;
-        Debug.Log(T);
         float y=Mathf.Sin(Mathf.Deg2Rad*T)*query.distance;
         float x=Mathf.Cos(Mathf.Deg2Rad*T)*query.distance;
         
