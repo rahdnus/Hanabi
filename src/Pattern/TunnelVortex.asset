@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mode: 0
   radius: 0.26
-  spin: 1
+  spin: 0
   clockwise: 0
   rotationSpeed: 1
   bulletPrefab: {fileID: 2079390810993662005, guid: 19d4a24e453c6dd4ab282648f5d7e04d, type: 3}
   noofSpawners: 10
   startAngle: 90
   spreadAngle: 324
-  bulletSpeed: 3
-  speedVariance: 0.2
+  bulletSpeed: 1.2
+  speedVariance: 0.6
+  bulletLifeTime: 10
   spawnRate: 3
   times: 3

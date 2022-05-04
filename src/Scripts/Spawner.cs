@@ -5,11 +5,12 @@ using UnityEngine;
 namespace Hanabi{
 public class Spawner : MonoBehaviour
 {
+    [SerializeField]AudioClip[] spawnclip;
     [SerializeField] Pattern pattern;
     [SerializeField]MovementTranslator translator=null;
-    /*TEMP*/ 
+
     Transform[] spawnPoints;
-    public bool destinationreached=false;
+    /*TEMP*/ public bool destinationreached=false;
     public bool move;
     float timer;
     int spawns=0;
@@ -35,14 +36,16 @@ public class Spawner : MonoBehaviour
         if(pattern.spin)
             Spin();
         
-        if(Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            spawns=0;
-            if(pattern.mode==SpawnMode.Async)
-                StartCoroutine(AsyncSpawn());
-            else if(pattern.mode==SpawnMode.Sync)
-                SyncSpawn();
-        }
+        // if(Input.GetKeyDown(KeyCode.Mouse0))
+        // {
+        //     if(pattern.mode==SpawnMode.Async)
+        //         StartCoroutine(AsyncSpawn());
+        //     else if(pattern.mode==SpawnMode.Sync)
+        //     {
+        //         SyncSpawn();
+
+        //     }
+    // }
     }
     void Spin()
     {
@@ -55,7 +58,7 @@ public class Spawner : MonoBehaviour
             transform.Rotate(new Vector3(0,0,-pattern.rotationSpeed));
         }
     }
-    IEnumerator AsyncSpawn()
+    public IEnumerator AsyncSpawn()
     {
         while(true)
         {
@@ -71,29 +74,31 @@ public class Spawner : MonoBehaviour
             }
             foreach(Transform point in spawnPoints)
             {
-                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(pattern.bulletSpeed);
+                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(pattern.bulletSpeed,pattern.bulletLifeTime);
             }
         }
     }
-    void SyncSpawn()
+    public void SyncSpawn()
     {
-            float speed=pattern.bulletSpeed;
-
+        float speed=pattern.bulletSpeed;
+         int index=Random.Range(0,spawnclip.Length);
+                AudioSource.PlayClipAtPoint(spawnclip[index],transform.position);
         while(spawns<pattern.times)
         {
             spawns++;
             foreach(Transform point in spawnPoints)
             {
-                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(speed);
+                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(speed,pattern.bulletLifeTime);
             }
-            speed-=pattern.speedVariance;
+            speed+=pattern.speedVariance;
         }
-           
+          spawns=0; 
     }
     /*TEMP*/void OnReach()
     {
         destinationreached=true;
     }
+
 }
 }
 

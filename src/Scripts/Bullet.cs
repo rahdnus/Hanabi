@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Hanabi{
-
-
 public class Bullet : MonoBehaviour
 {
-    Rigidbody rb;
+    Rigidbody2D rb;
     float bulletSpeed=1;
     float counter=0f;
     float lifetime=3.0f;
-    // Start is called before the first frame update
     void Awake()
     {
-        rb=GetComponent<Rigidbody>();
+        rb=GetComponent<Rigidbody2D>();
     }
-    public void Init(float speed)
+    public void Init(float speed,float time)
     {
         bulletSpeed=speed;
+        lifetime=time;
     }
     void Update()
     {
@@ -30,7 +28,23 @@ public class Bullet : MonoBehaviour
     }
     void FixedUpdate()
     {
-        rb.MovePosition((transform.position+transform.forward*bulletSpeed*Time.deltaTime));   
+        rb.velocity=transform.forward*bulletSpeed;
     }
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.tag=="Player")
+        {
+            other.gameObject.GetComponent<IDamagable>().TakeDamage();
+            Destroy(gameObject);
+        }
+        if((1<<other.gameObject.layer & LayerMask.GetMask("Ground"))!=0)
+        { 
+            Destroy(gameObject);
+
+        }
+    }
+}
+interface IDamagable{
+    public void TakeDamage();
 }
 }
