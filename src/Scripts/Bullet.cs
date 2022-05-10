@@ -7,16 +7,18 @@ public class Bullet : MonoBehaviour
 {
     Rigidbody2D rb;
     float bulletSpeed=1;
+    int damage=0;
     float counter=0f;
     float lifetime=3.0f;
     void Awake()
     {
         rb=GetComponent<Rigidbody2D>();
     }
-    public void Init(float speed,float time)
+    public void Init(float _speed,float _time,int _damage)
     {
-        bulletSpeed=speed;
-        lifetime=time;
+        bulletSpeed=_speed;
+        lifetime=_time;
+        damage=_damage;
     }
     void Update()
     {
@@ -34,7 +36,7 @@ public class Bullet : MonoBehaviour
     {
         if(other.gameObject.tag=="Player")
         {
-            other.gameObject.GetComponent<IDamagable>().TakeDamage();
+            other.gameObject.GetComponent<IDamagable>().TakeDamage(damage);
             Destroy(gameObject);
         }
         if((1<<other.gameObject.layer & LayerMask.GetMask("Ground"))!=0)
@@ -45,6 +47,6 @@ public class Bullet : MonoBehaviour
     }
 }
 interface IDamagable{
-    public void TakeDamage();
+    public void TakeDamage(int damage);
 }
 }

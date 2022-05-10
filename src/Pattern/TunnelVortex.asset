@@ -21,7 +21,7 @@ MonoBehaviour:
   noofSpawners: 10
   startAngle: 90
   spreadAngle: 324
-  bulletSpeed: 1.2
+  bulletSpeed: 3
   speedVariance: 0.6
   bulletLifeTime: 10
   spawnRate: 3

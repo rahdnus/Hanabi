@@ -8,7 +8,7 @@ public class Spawner : MonoBehaviour
     [SerializeField]AudioClip[] spawnclip;
     [SerializeField] Pattern pattern;
     [SerializeField]MovementTranslator translator=null;
-
+    [SerializeField]int damage=20;
     Transform[] spawnPoints;
     /*TEMP*/ public bool destinationreached=false;
     public bool move;
@@ -74,7 +74,7 @@ public class Spawner : MonoBehaviour
             }
             foreach(Transform point in spawnPoints)
             {
-                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(pattern.bulletSpeed,pattern.bulletLifeTime);
+                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(pattern.bulletSpeed,pattern.bulletLifeTime,damage);
             }
         }
     }
@@ -88,7 +88,7 @@ public class Spawner : MonoBehaviour
             spawns++;
             foreach(Transform point in spawnPoints)
             {
-                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(speed,pattern.bulletLifeTime);
+                Instantiate(pattern.bulletPrefab,point.position,point.rotation).GetComponent<Bullet>().Init(speed,pattern.bulletLifeTime,damage);
             }
             speed+=pattern.speedVariance;
         }
